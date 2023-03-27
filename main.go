@@ -1,7 +1,8 @@
 package main
 
-import "fmt"
+import "github.com/TheDevExperiment/server/router"
 
 func main() {
-	fmt.Println("hello server")
+	r := router.SetupRouter()
+	r.Run(":8080")
 }
