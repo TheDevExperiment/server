@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  ping-server:
+    build:
+      context: .
+    container_name: ping-server
+    hostname: ping-server
+    networks:
+      - mynet
+    ports:
+      - 8080:8080
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+networks:
+  mynet:
+    driver: bridge
