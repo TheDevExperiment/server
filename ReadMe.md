@@ -6,6 +6,8 @@ Project Veilb is a social media app that lets you share your thoughts and feelin
 `make server` -> this will compile the server and start it
 `make clean` -> to remove any old images
 
+Use `localhost:8082` to checkout mongodb collections via browser.
+
 ## Features
 
 - Anonymously create and share posts or rate posts created by other users.

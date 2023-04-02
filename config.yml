@@ -1,0 +1,2 @@
+mongodb:
+  connection_string: mongodb://root:rootpassword@mongodb_container:27017/
