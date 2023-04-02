@@ -2,6 +2,14 @@
 
 Project Veilb is a social media app that lets you share your thoughts and feelings anonymously with a community of like-minded individuals. With our advanced user profiling system, you can connect with other users based on shared interests and values.
 
+# How to run the code?
+`make server` -> this will compile the server and start it in background
+`make server_logs` -> to see server logs once it has been started
+`make clean` -> to shutdown the server and remove its files
+
+
+Use `localhost:8082` to checkout mongodb collections via browser.
+
 ## Features
 
 - Anonymously create and share posts or rate posts created by other users.

@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  ping-server:
+    build:
+      context: .
+    container_name: ping-server
+    depends_on:
+      - mongodb_container
+    hostname: ping-server
+    networks:
+      - mynet
+    ports:
+      - 8080:8080
+    deploy:
+      restart_policy:
+        condition: on-failure
+  mongodb_container:
+    image: mongo:6.0.5
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootpassword
+    ports:
+      - 27017:27017
+    networks:
+      - mynet
+    volumes:
+      - mongodb_data_container:/data/db
+  mongo-express:
+    image: mongo-express
+    depends_on:
+      - mongodb_container
+    restart: always
+    ports:
+      - 8082:8081
+    networks:
+      - mynet
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: rootpassword
+      ME_CONFIG_MONGO_DB_SERVER: mongodb_container
+      ME_CONFIG_MONGODB_URL: "mongodb://root:rootpassword@mongodb_container:27017/"
+
+networks:
+  mynet:
+    driver: bridge
+
+volumes:
+  mongodb_data_container:
