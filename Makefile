@@ -1,5 +1,8 @@
 server:
-	docker-compose up --build --remove-orphans
+	docker-compose up -d --build --remove-orphans
+
+server_logs:
+	docker logs -f ping-server
 
 clean:
-	docker rm docker-ping || true
+	docker compose down
