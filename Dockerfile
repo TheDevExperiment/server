@@ -19,6 +19,7 @@ FROM gcr.io/distroless/base-debian11
 WORKDIR /
 
 COPY --from=build /server /server
+COPY ./config.yml /config.yml
 
 EXPOSE 8080
 
