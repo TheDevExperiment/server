@@ -1,0 +1,37 @@
+[
+    {
+      "_id": {"$oid": "6170c6d9b210f8e6e31d6c91"},
+      "isGuest": true,
+      "GuestAuthSecret": "guestsecret123",
+      "CreatedAt": {"$date": "2022-10-20T10:30:00.000Z"},
+      "LastModified": {"$date": "2022-10-20T10:30:00.000Z"},
+      "displayName": "John Doe",
+      "CountryId": "USA",
+      "CityId": "New York",
+      "Age": "20-25",
+      "Score": {
+        "RatingScoreSum": 100,
+        "RatingCount": 20
+      },
+      "isActive": true,
+      "DeletionReason": null
+    },
+    {
+      "_id": {"$oid": "6170c6d9b210f8e6e31d6c92"},
+      "isGuest": true,
+      "GuestAuthSecret": "guestsecret456",
+      "CreatedAt": {"$date": "2022-10-21T12:30:00.000Z"},
+      "LastModified": {"$date": "2022-10-21T12:30:00.000Z"},
+      "displayName": "Jane Smith",
+      "CountryId": "Canada",
+      "CityId": "Toronto",
+      "Age": "25-30",
+      "Score": {
+        "RatingScoreSum": 50,
+        "RatingCount": 10
+      },
+      "isActive": true,
+      "DeletionReason": null
+    }
+  ]
+  

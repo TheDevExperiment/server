@@ -1,0 +1,41 @@
+[
+    {
+      "_id": {"$oid": "6170c708b210f8e6e31d6c94"},
+      "UserId": {"$oid": "6170c6d9b210f8e6e31d6c91"},
+      "AuthorName": "John Doe",
+      "CreatedAt": {"$date": "2022-10-22T14:30:00.000Z"},
+      "Content": {
+        "Message": "hello world",
+        "FetchUrl": null,
+        "BackgroundType": "Image"
+      },
+      "CityId": "New York",
+      "CountryId": "USA",
+      "Coordinate": {
+        "type": "Point",
+        "coordinates": [-73.935242, 40.730610]
+      },
+      "isActive": true,
+      "Likes": 5
+    },
+    {
+      "_id": {"$oid": "6170c708b210f8e6e31d6c95"},
+      "UserId": {"$oid": "6170c6d9b210f8e6e31d6c92"},
+      "AuthorName": "Jane Smith",
+      "CreatedAt": {"$date": "2022-10-23T16:30:00.000Z"},
+      "Content": {
+        "Message": "bye world",
+        "FetchUrl": null,
+        "BackgroundType": "Image"
+      },
+      "CityId": "Toronto",
+      "CountryId": "Canada",
+      "Coordinate": {
+        "type": "Point",
+        "coordinates": [-79.3832, 43.6532]
+      },
+      "isActive": true,
+      "Likes": 10
+    }
+  ]
+  
