@@ -34,7 +34,7 @@
         "type": "Point",
         "coordinates": [-79.3832, 43.6532]
       },
-      "isActive": true,
+      "IsActive": true,
       "Likes": 10
     }
   ]
