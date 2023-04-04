@@ -1,37 +1,37 @@
 [
     {
       "_id": {"$oid": "6170c6d9b210f8e6e31d6c91"},
-      "IsGuest": true,
-      "GuestAuthSecret": "guestsecret123",
-      "CreatedAt": {"$date": "2022-10-20T10:30:00.000Z"},
-      "LastModified": {"$date": "2022-10-20T10:30:00.000Z"},
-      "DisplayName": "John Doe",
-      "CountryId": "USA",
-      "CityId": "New York",
-      "Age": "20-25",
-      "Score": {
-        "RatingScoreSum": 100,
-        "RatingCount": 20
+      "isGuest": true,
+      "guestAuthSecret": "guestsecret123",
+      "createdAt": {"$date": "2022-10-20T10:30:00.000Z"},
+      "lastModified": {"$date": "2022-10-20T10:30:00.000Z"},
+      "displayName": "John Doe",
+      "countryId": "USA",
+      "cityId": "New York",
+      "age": "20-25",
+      "score": {
+        "ratingScoreSum": 100,
+        "ratingCount": 20
       },
-      "IsActive": true,
-      "DeletionReason": null
+      "isActive": true,
+      "deletionReason": null
     },
     {
       "_id": {"$oid": "6170c6d9b210f8e6e31d6c92"},
-      "IsGuest": true,
-      "GuestAuthSecret": "guestsecret456",
-      "CreatedAt": {"$date": "2022-10-21T12:30:00.000Z"},
-      "LastModified": {"$date": "2022-10-21T12:30:00.000Z"},
-      "DisplayName": "Jane Smith",
-      "CountryId": "Canada",
-      "CityId": "Toronto",
-      "Age": "25-30",
-      "Score": {
-        "RatingScoreSum": 50,
-        "RatingCount": 10
+      "isGuest": true,
+      "guestAuthSecret": "guestsecret456",
+      "createdAt": {"$date": "2022-10-21T12:30:00.000Z"},
+      "lastModified": {"$date": "2022-10-21T12:30:00.000Z"},
+      "displayName": "Jane Smith",
+      "countryId": "Canada",
+      "cityId": "Toronto",
+      "age": "25-30",
+      "score": {
+        "ratingScoreSum": 50,
+        "ratingCount": 10
       },
-      "IsActive": true,
-      "DeletionReason": null
+      "isActive": true,
+      "deletionReason": null
     }
   ]
   
