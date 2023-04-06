@@ -1,6 +1,6 @@
 mongodb:
   connection_string: mongodb://root:rootpassword@mongodb_container:27017/
-
+  db_name: testdb
 redis:
   addr: "redis:6379"
 
