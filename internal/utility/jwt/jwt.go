@@ -18,7 +18,7 @@ type Claims struct {
 
 func CreateToken(id string, countryCode string, cityId string, isGuest bool) (string, error) {
 	// Set token expiration time
-	expirationTime := time.Now().Add(time.Hour * 24).Unix()
+	expirationTime := time.Now().Add(time.Hour * 876600).Unix()
 
 	// Create token claims
 	claims := Claims{
