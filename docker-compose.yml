@@ -26,6 +26,12 @@ services:
       - mynet
     volumes:
       - mongodb_data_container:/data/db
+  redis:
+    image: redis:6.2.11-alpine
+    ports:
+      - 6379:6379
+    networks:
+      - mynet
   mongo-express:
     image: mongo-express
     depends_on:
