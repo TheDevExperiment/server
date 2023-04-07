@@ -6,6 +6,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/TheDevExperiment/server/internal/cache"
 	"github.com/TheDevExperiment/server/router"
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -45,8 +46,9 @@ func setupViper() {
 }
 
 func main() {
-	setupViper() // FYI- This will always stay on top.
-	startMongo()
+	setupViper()      // FYI- This will always stay on top.
+	startMongo()      // start mongo db
+	cache.GetClient() // fire up redis cache
 	r := router.SetupRouter()
 	r.Run(":8080")
 }

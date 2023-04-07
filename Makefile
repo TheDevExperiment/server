@@ -1,5 +1,5 @@
 server:
-	docker-compose up -d --build --remove-orphans ping-server mongodb_container mongo-express
+	docker-compose up -d --build --remove-orphans --scale mongo-seed=0
 
 server_logs:
 	docker logs -f ping-server
