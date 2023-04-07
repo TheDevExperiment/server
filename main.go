@@ -2,11 +2,10 @@ package main
 
 import (
 	"context"
-	"fmt"
-	"log"
 	"time"
 
 	"github.com/TheDevExperiment/server/internal/cache"
+	logger "github.com/TheDevExperiment/server/internal/log"
 	"github.com/TheDevExperiment/server/router"
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -23,7 +22,7 @@ func startMongo() {
 	// TODO: use mongodb client returned below
 	_, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
-		log.Fatal(err)
+		logger.Fatal(err)
 	}
 
 }
@@ -41,14 +40,22 @@ func setupViper() {
 	viper.SetConfigType("yml")
 
 	if err := viper.ReadInConfig(); err != nil {
-		fmt.Printf("Error reading config file, %s", err)
+		logger.Fatalf("Error reading config file, %s", err)
 	}
 }
 
+func startLogger() {
+	// TODO: choose logger acc to env ie prod/dev/stag
+	// default is dev
+	logger.InitZapLogger()
+}
+
 func main() {
-	setupViper()      // FYI- This will always stay on top.
+	startLogger()     // start logger
+	setupViper()      // FYI- Be careful while adding anything above this.
 	startMongo()      // start mongo db
 	cache.GetClient() // fire up redis cache
+
 	r := router.SetupRouter()
 	r.Run(":8080")
 }

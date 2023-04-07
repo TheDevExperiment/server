@@ -2,9 +2,9 @@ package cache
 
 import (
 	"context"
-	"fmt"
 	"time"
 
+	"github.com/TheDevExperiment/server/internal/log"
 	"github.com/redis/go-redis/v9"
 	"github.com/spf13/viper"
 )
@@ -36,7 +36,7 @@ func (rc *redisCache) Set(ctx context.Context, key string, value interface{}, tt
 	err := rc.client.Set(ctx, key, value, ttl).Err()
 	// TODO: implement compression of data before storing it
 	if err != nil {
-		fmt.Println(err)
+		log.Error(err)
 	}
 }
 
