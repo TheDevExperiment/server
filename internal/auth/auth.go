@@ -1,20 +1,20 @@
 package auth
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/TheDevExperiment/server/internal/db/repositories"
-	"github.com/TheDevExperiment/server/router/models"
+	"github.com/TheDevExperiment/server/router/models/authModel"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func GuestValidateV1(c *gin.Context) {
 	// first bind the req to our model
-	var req models.AuthRequest
-	var res models.AuthResponse
+	var req authModel.AuthRequest
+	var res authModel.AuthResponse
 	userRepository, ok := c.MustGet("userRepository").(*repositories.UserRepository)
 	if !ok {
 		log.Fatal("oops!", ok)
@@ -37,10 +37,57 @@ func GuestValidateV1(c *gin.Context) {
 		return
 	}
 
-	data, err := userRepository.Find(c, bson.M{})
-	fmt.Print(err)
+	hexId, err := primitive.ObjectIDFromHex(req.UserId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	data, err := userRepository.Find(c, bson.M{"_id": hexId})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	log.Print(data)
+	if data == nil || len(data) < 1 {
+		res.Message = "Failed Authentication."
+		c.JSON(http.StatusUnauthorized, res)
+		return
+	}
+	// if auth secret provided matches with the stored one,
+	if req.SecretToken == data[0].GuestAuthSecret && req.UserId == data[0].Id.Hex() {
+		res.Message = "User Verified Successfully."
+		res.Data = data[0]
+		c.JSON(http.StatusOK, res)
+		return
+	}
+
 	// some error occurent
-	res.Message = "All Good, check server console for output."
+	res.Message = "Failed Authentication."
+	c.JSON(http.StatusUnauthorized, res)
+}
+
+func CreateGuestV1(c *gin.Context) {
+	// first bind the req to our model
+	var req authModel.AuthRequest
+	var res authModel.AuthResponse
+	userRepository, ok := c.MustGet("userRepository").(*repositories.UserRepository)
+	if !ok {
+		log.Fatal("oops!", ok)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": ok})
+	}
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	data, err := userRepository.Create(c, "18-20", "IND", "DEL")
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	log.Print(data)
+	// some error occurent
+	res.Message = "Created User."
 	res.Data = data
-	c.JSON(http.StatusOK, res)
+	c.JSON(http.StatusCreated, res)
 }

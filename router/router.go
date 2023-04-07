@@ -27,5 +27,6 @@ func SetupRouter() *gin.Engine {
 
 	// define all the routes
 	r.POST("/auth/v1/guest-validate", auth.GuestValidateV1)
+	r.POST("/auth/v1/guest", auth.CreateGuestV1)
 	return r
 }
