@@ -15,17 +15,36 @@ import (
 type UserRepository struct {
 	collection *mongo.Collection
 }
+type UserModel struct {
+	Id              primitive.ObjectID `bson:"_id"`
+	IsGuest         bool               `bson:"isGuest"`
+	GuestAuthSecret string             `bson:"guestAuthSecret"`
+	CreatedAt       primitive.DateTime `bson:"createdAt"`
+	LastModified    primitive.DateTime `bson:"lastModified"`
+	DisplayName     string             `bson:"displayName"`
+	CountryID       string             `bson:"countryId"`
+	CityID          string             `bson:"cityId"`
+	Age             string             `bson:"age"`
+	Score           _score             `bson:"score"`
+	IsActive        bool               `bson:"isActive"`
+	DeletionReason  string             `bson:"deletionReason"`
+}
+
+type _score struct {
+	RatingScoreSum int `bson:"ratingScoreSum"`
+	RatingCount    int `bson:"ratingCount"`
+}
 
 func NewUserRepository() *UserRepository {
 	return &UserRepository{db.GetCollection(viper.GetString("mongodb.db_name"), "users")}
 }
 
-func (r *UserRepository) Find(ctx context.Context, filter interface{}) ([]interface{}, error) {
+func (r *UserRepository) Find(ctx context.Context, filter interface{}) ([]UserModel, error) {
 	cursor, err := r.collection.Find(ctx, filter)
 	if err != nil {
 		return nil, err
 	}
-	var results []interface{}
+	var results []UserModel
 	err = cursor.All(ctx, &results)
 	if err != nil {
 		return nil, err
