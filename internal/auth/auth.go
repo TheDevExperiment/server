@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/TheDevExperiment/server/internal/db/repositories"
-	"github.com/TheDevExperiment/server/internal/utility/jwt"
+	"github.com/TheDevExperiment/server/middlewares"
 	"github.com/TheDevExperiment/server/router/models/auth"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -13,8 +13,6 @@ import (
 )
 
 func GuestValidateV1(c *gin.Context) {
-	// first bind the req to our model
-	var req auth.AuthRequest
 	var res auth.AuthResponse
 	userRepository, ok := c.MustGet("userRepository").(*repositories.UserRepository)
 	if !ok {
@@ -22,29 +20,15 @@ func GuestValidateV1(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, res)
 		return
 	}
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
 
-	if req.SecretToken == "" {
-		res.Message = "SecretToken must be provided."
-		c.JSON(http.StatusBadRequest, res)
+	//set by the middleware
+	userId := c.GetString(middlewares.ContextKey_UserId)
+	if userId == "" {
+		res.Message = http.StatusText(http.StatusUnauthorized)
+		c.JSON(http.StatusUnauthorized, res)
 		return
 	}
-
-	tokenClaims, err := jwt.VerifyToken(req.SecretToken)
-	if err != nil {
-		res.Message = err.Error()
-		c.JSON(http.StatusBadRequest, res)
-		return
-	}
-	if tokenClaims == nil {
-		res.Message = "Token is not valid"
-		c.JSON(http.StatusBadRequest, res)
-		return
-	}
-	id, _ := primitive.ObjectIDFromHex(tokenClaims.Subject)
+	id, _ := primitive.ObjectIDFromHex(userId)
 	data, err := userRepository.Find(c, bson.M{"_id": id})
 	if err != nil {
 		res.Message = err.Error()
