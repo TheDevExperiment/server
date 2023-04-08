@@ -3,3 +3,6 @@ mongodb:
 
 redis:
   addr: "redis:6379"
+
+misc:
+  env: dev
