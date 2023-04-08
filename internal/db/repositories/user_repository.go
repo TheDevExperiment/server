@@ -4,10 +4,9 @@ package repositories
 
 import (
 	"context"
-	"fmt"
+
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 
 	"github.com/TheDevExperiment/server/internal/db"
@@ -31,8 +30,6 @@ func (r *UserRepository) Find(ctx context.Context, filter interface{}) ([]interf
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("Result = ")
-	fmt.Println(results)
 	return results, nil
 }
 
@@ -48,20 +45,4 @@ func (r *UserRepository) Update(ctx context.Context, filter interface{}, update 
 
 	_, err := r.collection.UpdateMany(ctx, filter, updateDoc)
 	return err
-}
-
-func (r *UserRepository) GetById(ctx context.Context, id primitive.ObjectID) (interface{}, error) {
-	filter := bson.M{"_id": id}
-	result := r.collection.FindOne(ctx, filter)
-
-	if err := result.Err(); err != nil {
-		return nil, err
-	}
-
-	var user interface{}
-	if err := result.Decode(&user); err != nil {
-		return nil, err
-	}
-
-	return user, nil
 }

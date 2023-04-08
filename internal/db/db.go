@@ -4,11 +4,12 @@ package db
 
 import (
 	"context"
-	"fmt"
+	"log"
+	"time"
+
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"time"
 )
 
 var client *mongo.Client
@@ -25,7 +26,7 @@ func Connect() error {
 
 	c, err := mongo.Connect(ctx, clientOptions)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 		return err
 	}
 

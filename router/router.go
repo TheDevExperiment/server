@@ -17,10 +17,11 @@ import (
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
+	userRepository := repositories.NewUserRepository()
 
 	// TODO: register middleware
 	r.Use(func(c *gin.Context) {
-		c.Set("userRepository", repositories.NewUserRepository())
+		c.Set("userRepository", userRepository)
 		c.Next()
 	})
 
