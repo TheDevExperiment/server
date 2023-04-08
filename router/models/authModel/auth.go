@@ -1,9 +1,7 @@
 package authModel
 
 type AuthRequest struct {
-	UserId      string `form:"userId" json:"userId" xml:"userId"  binding:"required"`
 	SecretToken string `form:"secretToken" json:"secretToken" xml:"secretToken" binding:"required"`
-	IsGuest     bool   `form:"isGuest" json:"isGuest" xml:"isGuest" binding:"required"`
 }
 
 type AuthResponse struct {

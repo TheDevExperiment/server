@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/TheDevExperiment/server/internal/db/repositories"
+	"github.com/TheDevExperiment/server/internal/utility/jwt"
 	"github.com/TheDevExperiment/server/router/models/authModel"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
@@ -19,51 +20,45 @@ func GuestValidateV1(c *gin.Context) {
 	if !ok {
 		log.Fatal("oops!", ok)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": ok})
+		return
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// if is not a guest account
-	if !req.IsGuest {
-		res.Message = "Only Guest Accounts are supported"
-		c.JSON(http.StatusNotImplemented, res)
-		return
-	}
-	if req.UserId == "" || req.SecretToken == "" {
-		res.Message = "UserId and SecretToken must be provided."
+	if req.SecretToken == "" {
+		res.Message = "SecretToken must be provided."
 		c.JSON(http.StatusBadRequest, res)
 		return
 	}
 
-	hexId, err := primitive.ObjectIDFromHex(req.UserId)
+	tokenClaims, err := jwt.VerifyToken(req.SecretToken)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		res.Message = err.Error()
+		c.JSON(http.StatusBadRequest, res)
 		return
 	}
-	data, err := userRepository.Find(c, bson.M{"_id": hexId})
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	if tokenClaims == nil {
+		res.Message = "Token is not valid"
+		c.JSON(http.StatusBadRequest, res)
 		return
 	}
-	log.Print(data)
+	id, _ := primitive.ObjectIDFromHex(tokenClaims.Subject)
+	data, err := userRepository.Find(c, bson.M{"_id": id})
+	if err != nil {
+		res.Message = err.Error()
+		c.JSON(http.StatusInternalServerError, res)
+		return
+	}
 	if data == nil || len(data) < 1 {
-		res.Message = "Failed Authentication."
+		res.Message = "User not found"
 		c.JSON(http.StatusUnauthorized, res)
 		return
 	}
-	// if auth secret provided matches with the stored one,
-	if req.SecretToken == data[0].GuestAuthSecret && req.UserId == data[0].Id.Hex() {
-		res.Message = "User Verified Successfully."
-		res.Data = data[0]
-		c.JSON(http.StatusOK, res)
-		return
-	}
-
-	// some error occurent
-	res.Message = "Failed Authentication."
-	c.JSON(http.StatusUnauthorized, res)
+	res.Message = "Authentication Successful"
+	res.Data = data
+	c.JSON(http.StatusOK, res)
 }
 
 func CreateGuestV1(c *gin.Context) {
