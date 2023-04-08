@@ -9,7 +9,6 @@ import (
 	"github.com/TheDevExperiment/server/router/models/auth"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func GuestValidateV1(c *gin.Context) {
@@ -28,8 +27,7 @@ func GuestValidateV1(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, res)
 		return
 	}
-	id, _ := primitive.ObjectIDFromHex(userId)
-	data, err := userRepository.Find(c, bson.M{"_id": id})
+	data, err := userRepository.Find(c, bson.M{"_id": userId})
 	if err != nil {
 		res.Message = err.Error()
 		c.JSON(http.StatusInternalServerError, res)

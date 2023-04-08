@@ -49,7 +49,6 @@ type UserUpdateModel struct {
 	IsActive       bool   `bson:"isActive,omitempty"`
 	DeletionReason string `bson:"deletionReason,omitempty"`
 }
-
 type _score struct {
 	RatingScoreSum int `bson:"ratingScoreSum"`
 	RatingCount    int `bson:"ratingCount"`
@@ -58,9 +57,24 @@ type _score struct {
 func NewUserRepository() *UserRepository {
 	return &UserRepository{db.GetCollection(viper.GetString("mongodb.db_name"), db.CollectionUsers)}
 }
-
 func (r *UserRepository) Find(ctx context.Context, filter interface{}) ([]UserModel, error) {
-	cursor, err := r.collection.Find(ctx, filter)
+	bsonFilter, ok := filter.(bson.M)
+	if !ok {
+		return nil, errors.New("Arg filter failed to convert to bsonFilter")
+	}
+	if bsonFilter["_id"] != nil {
+		id, ok := bsonFilter["_id"].(string)
+		if !ok {
+			return nil, errors.New("_id filter must have a string type")
+		}
+
+		oid, err := primitive.ObjectIDFromHex(id)
+		if err != nil {
+			return nil, err
+		}
+		bsonFilter["_id"] = oid
+	}
+	cursor, err := r.collection.Find(ctx, bsonFilter)
 	if err != nil {
 		return nil, err
 	}
