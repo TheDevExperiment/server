@@ -6,7 +6,7 @@ import (
 
 	"github.com/TheDevExperiment/server/internal/db/repositories"
 	"github.com/TheDevExperiment/server/internal/utility/jwt"
-	"github.com/TheDevExperiment/server/router/models/authModel"
+	"github.com/TheDevExperiment/server/router/models/auth"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -14,12 +14,12 @@ import (
 
 func GuestValidateV1(c *gin.Context) {
 	// first bind the req to our model
-	var req authModel.AuthRequest
-	var res authModel.AuthResponse
+	var req auth.AuthRequest
+	var res auth.AuthResponse
 	userRepository, ok := c.MustGet("userRepository").(*repositories.UserRepository)
 	if !ok {
-		log.Fatal("oops!", ok)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": ok})
+		res.Message = http.StatusText(http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, res)
 		return
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -63,12 +63,13 @@ func GuestValidateV1(c *gin.Context) {
 
 func CreateGuestV1(c *gin.Context) {
 	// first bind the req to our model
-	var req authModel.CreateAccountRequest
-	var res authModel.AuthResponse
+	var req auth.CreateAccountRequest
+	var res auth.AuthResponse
 	userRepository, ok := c.MustGet("userRepository").(*repositories.UserRepository)
 	if !ok {
-		log.Fatal("oops!", ok)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": ok})
+		res.Message = http.StatusText(http.StatusInternalServerError)
+		c.JSON(http.StatusInternalServerError, res)
+		return
 	}
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -91,6 +92,6 @@ func CreateGuestV1(c *gin.Context) {
 	log.Print(data)
 	// some error occurent
 	res.Message = "Created User."
-	res.Data = data
+	res.Data = []repositories.UserModel{data}
 	c.JSON(http.StatusCreated, res)
 }
