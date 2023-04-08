@@ -3,7 +3,7 @@ package jwt
 import (
 	"errors"
 	"fmt"
-	"time"
+	"math"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/spf13/viper"
@@ -17,13 +17,10 @@ type Claims struct {
 }
 
 func CreateToken(id string, countryCode string, cityId string, isGuest bool) (string, error) {
-	// Set token expiration time
-	expirationTime := time.Now().Add(time.Hour * 876600).Unix()
-
 	// Create token claims
 	claims := Claims{
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime,
+			ExpiresAt: math.MaxInt64,
 			Issuer:    viper.GetString("jwt.issuer"),
 			Subject:   id,
 		},

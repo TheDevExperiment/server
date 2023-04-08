@@ -63,7 +63,7 @@ func GuestValidateV1(c *gin.Context) {
 
 func CreateGuestV1(c *gin.Context) {
 	// first bind the req to our model
-	var req authModel.AuthRequest
+	var req authModel.CreateAccountRequest
 	var res authModel.AuthResponse
 	userRepository, ok := c.MustGet("userRepository").(*repositories.UserRepository)
 	if !ok {
@@ -74,8 +74,16 @@ func CreateGuestV1(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	data, err := userRepository.Create(c, "18-20", "IND", "DEL")
+	if req.Age == "" {
+		req.Age = "18-20"
+	}
+	if req.CountryId == "" {
+		req.CountryId = "IND"
+	}
+	if req.CityId == "" {
+		req.CityId = "DEL"
+	}
+	data, err := userRepository.Create(c, req.Age, req.CountryId, req.CityId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

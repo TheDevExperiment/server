@@ -9,3 +9,9 @@ type AuthResponse struct {
 	ErrorCode string      `form:"errorCode" json:"errorCode" xml:"errorCode" binding:"required"`
 	Data      interface{} `form:"data" json:"data" json:"data"`
 }
+
+type CreateAccountRequest struct {
+	Age       string `bson:"age" json:"age" binding:"required"`
+	CountryId string `bson:"countryId" json:"countryId" binding:"required"`
+	CityId    string `bson:"cityId" json:"cityId" binding:"required"`
+}
