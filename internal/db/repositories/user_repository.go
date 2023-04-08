@@ -57,23 +57,14 @@ type _score struct {
 func NewUserRepository() *UserRepository {
 	return &UserRepository{db.GetCollection(viper.GetString("mongodb.db_name"), db.CollectionUsers)}
 }
-func (r *UserRepository) Find(ctx context.Context, filter interface{}) ([]UserModel, error) {
-	bsonFilter, ok := filter.(bson.M)
-	if !ok {
-		return nil, errors.New("Arg filter failed to convert to bsonFilter")
+func (r *UserRepository) FindById(ctx context.Context, id string) ([]UserModel, error) {
+	bsonFilter := bson.M{"_id": id}
+	oid, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
 	}
-	if bsonFilter["_id"] != nil {
-		id, ok := bsonFilter["_id"].(string)
-		if !ok {
-			return nil, errors.New("_id filter must have a string type")
-		}
+	bsonFilter["_id"] = oid
 
-		oid, err := primitive.ObjectIDFromHex(id)
-		if err != nil {
-			return nil, err
-		}
-		bsonFilter["_id"] = oid
-	}
 	cursor, err := r.collection.Find(ctx, bsonFilter)
 	if err != nil {
 		return nil, err
