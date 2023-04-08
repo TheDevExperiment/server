@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 	"time"
 
 	"github.com/TheDevExperiment/server/internal/cache"
@@ -40,7 +41,7 @@ func setupViper() {
 	viper.SetConfigType("yml")
 
 	if err := viper.ReadInConfig(); err != nil {
-		logger.Fatalf("Error reading config file, %s", err)
+		log.Fatalf("Error reading config file, %s", err)
 	}
 }
 
@@ -51,8 +52,8 @@ func startLogger() {
 }
 
 func main() {
-	startLogger()     // start logger
 	setupViper()      // FYI- Be careful while adding anything above this.
+	startLogger()     // start logger
 	startMongo()      // start mongo db
 	cache.GetClient() // fire up redis cache
 
