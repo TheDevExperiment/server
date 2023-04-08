@@ -52,7 +52,7 @@ func GuestValidateV1(c *gin.Context) {
 		return
 	}
 	if data == nil || len(data) < 1 {
-		res.Message = "User not found"
+		res.Message = http.StatusText(http.StatusUnauthorized)
 		c.JSON(http.StatusUnauthorized, res)
 		return
 	}

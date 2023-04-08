@@ -56,7 +56,7 @@ type _score struct {
 }
 
 func NewUserRepository() *UserRepository {
-	return &UserRepository{db.GetCollection(viper.GetString("mongodb.db_name"), "users")}
+	return &UserRepository{db.GetCollection(viper.GetString("mongodb.db_name"), db.CollectionUsers)}
 }
 
 func (r *UserRepository) Find(ctx context.Context, filter interface{}) ([]UserModel, error) {
@@ -71,6 +71,7 @@ func (r *UserRepository) Find(ctx context.Context, filter interface{}) ([]UserMo
 	}
 	return results, nil
 }
+
 func (r *UserRepository) Create(ctx context.Context, userAge string, countryId string, cityId string) (UserModel, error) {
 	doc := UserModel{
 		IsGuest:         true,
