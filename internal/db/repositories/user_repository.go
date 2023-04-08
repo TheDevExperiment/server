@@ -86,7 +86,7 @@ func (r *UserRepository) Create(ctx context.Context, userAge string, countryId s
 		DeletionReason:  "",
 	}
 
-	result, err := r.collection.InsertOne(context.Background(), doc)
+	result, err := r.collection.InsertOne(ctx, doc)
 	if err != nil {
 		return UserModel{}, err
 	}
