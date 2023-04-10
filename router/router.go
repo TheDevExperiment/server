@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/TheDevExperiment/server/internal/auth"
 	"github.com/TheDevExperiment/server/internal/db/repositories"
+	"github.com/TheDevExperiment/server/internal/post"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,5 +28,7 @@ func SetupRouter() *gin.Engine {
 
 	// define all the routes
 	r.POST("/auth/v1/guest-validate", auth.GuestValidateV1)
+	r.POST("/post/v1/create", post.CreateV1)
+	r.POST("/post/v1/nearby", post.NearbyV1)
 	return r
 }
