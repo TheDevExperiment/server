@@ -1,11 +1,18 @@
 package log
 
-import "go.uber.org/zap"
+import (
+	"github.com/spf13/viper"
+	"go.uber.org/zap"
+)
 
 var sugaredLogger *zap.SugaredLogger
 
 func InitZapLogger() {
+	env := viper.GetString("misc.env")
 	logger, _ := zap.NewDevelopment()
+	if env == "prod" {
+		logger, _ = zap.NewProduction()
+	}
 	sugaredLogger = logger.Sugar()
 }
 

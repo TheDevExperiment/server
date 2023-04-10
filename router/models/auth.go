@@ -1,10 +1,12 @@
 package models
 
 type AuthRequest struct {
-	User     string `form:"user" json:"user" xml:"user"  binding:"required"`
-	Password string `form:"password" json:"password" xml:"password" binding:"required"`
+	UserId      string `form:"userId" json:"userId" xml:"userId"  binding:"required"`
+	SecretToken string `form:"secretToken" json:"secretToken" xml:"secretToken" binding:"required"`
+	IsGuest     bool   `form:"isGuest" json:"isGuest" xml:"isGuest" binding:"required"`
 }
 
 type AuthResponse struct {
-	Msg string `form:"msg" json:"msg" xml:"user"  binding:"required"`
+	Message   string `form:"message" json:"message" xml:"message"  binding:"required"`
+	ErrorCode string `form:"errorCode" json:"errorCode" xml:"errorCode" binding:"required"`
 }
