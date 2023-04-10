@@ -27,7 +27,7 @@ var singletonUserCollection *mongo.Collection
 
 func NewUserRepository() *UserRepository {
 	if singletonUserCollection == nil {
-		log.Debug("Created Connection to post collection")
+		log.Debug("Created Connection to user collection")
 		singletonUserCollection = db.GetCollection(viper.GetString("mongodb.db_name"), db.CollectionUsers)
 	}
 	return &UserRepository{collection: singletonUserCollection}

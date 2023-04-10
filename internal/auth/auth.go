@@ -13,12 +13,7 @@ import (
 
 func GuestValidateV1(c *gin.Context) {
 	var res auth.AuthResponse
-	userRepository, ok := c.MustGet("userRepository").(*users.UserRepository)
-	if !ok {
-		res.Message = http.StatusText(http.StatusInternalServerError)
-		c.JSON(http.StatusInternalServerError, res)
-		return
-	}
+	userRepository := users.NewUserRepository()
 
 	//set by the middleware
 	userId := c.GetString(middlewares.ContextKeyUserId)
@@ -47,12 +42,8 @@ func CreateGuestV1(c *gin.Context) {
 	// first bind the req to our model
 	var req auth.CreateAccountRequest
 	var res auth.AuthResponse
-	userRepository, ok := c.MustGet("userRepository").(*users.UserRepository)
-	if !ok {
-		res.Message = http.StatusText(http.StatusInternalServerError)
-		c.JSON(http.StatusInternalServerError, res)
-		return
-	}
+	userRepository := users.NewUserRepository()
+
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
