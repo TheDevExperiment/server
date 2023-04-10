@@ -5,7 +5,6 @@ package repositories
 import (
 	"context"
 	"errors"
-	"strconv"
 	"time"
 
 	"github.com/spf13/viper"
@@ -112,12 +111,13 @@ func (r *UserRepository) Create(ctx context.Context, userAge string, countryId s
 		GuestAuthSecret: secret,
 		LastModified:    primitive.NewDateTimeFromTime(time.Now()),
 	}
-	updateResult, err := r.UpdateById(ctx, insertedID.Hex(), deltaUpdate)
-	if err != nil {
-		return UserModel{}, err
+	success, updateErr := r.UpdateById(ctx, insertedID.Hex(), deltaUpdate)
+	if updateErr != nil {
+		return UserModel{}, updateErr
 	}
-
-	log.Debug(updateResult)
+	if !success {
+		return UserModel{}, nil
+	}
 
 	doc.Id = insertedID
 	doc.GuestAuthSecret = secret
@@ -134,11 +134,11 @@ func (r *UserRepository) Delete(ctx context.Context, filter interface{}) error {
 	return err
 }
 
-func (r *UserRepository) UpdateById(ctx context.Context, id string, update UserUpdateModel) (map[string]string, error) {
+func (r *UserRepository) UpdateById(ctx context.Context, id string, update UserUpdateModel) (bool, error) {
 	docId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		log.Errorf("failed to convert id to object id: %w", err)
-		return nil, err
+		return false, err
 	}
 
 	filter := bson.M{db.FieldId: docId}
@@ -148,16 +148,9 @@ func (r *UserRepository) UpdateById(ctx context.Context, id string, update UserU
 
 	updateResult, err := r.collection.UpdateOne(ctx, filter, updateDoc)
 	if err != nil {
-		return nil, err
+		return false, err
 	}
-
-	statistics := map[string]string{
-		"MatchedCount":  strconv.FormatInt(updateResult.MatchedCount, 10),
-		"ModifiedCount": strconv.FormatInt(updateResult.ModifiedCount, 10),
-		"UpsertedCount": strconv.FormatInt(updateResult.UpsertedCount, 10),
-	}
-	if updateResult.UpsertedID != nil {
-		statistics["UpsertedID"] = updateResult.UpsertedID.(primitive.ObjectID).Hex()
-	}
-	return statistics, nil
+	log.Debug(updateResult)
+	isSuccess := updateResult.ModifiedCount > 0
+	return isSuccess, nil
 }
