@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   ping-server:
@@ -47,17 +47,6 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: rootpassword
       ME_CONFIG_MONGO_DB_SERVER: mongodb_container
       ME_CONFIG_MONGODB_URL: "mongodb://root:rootpassword@mongodb_container:27017/"
-  mongo-seed:
-    build: ./mongo-seed
-    networks:
-      - mynet
-    depends_on:
-      - mongodb_container
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpassword
-    volumes:
-      - mongodb_data_container:/data/db
 networks:
   mynet:
     driver: bridge
