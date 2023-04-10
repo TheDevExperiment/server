@@ -57,7 +57,9 @@ func VerifyToken(tokenString string) (*Claims, error) {
 	if err != nil {
 		return nil, fmt.Errorf("could not parse token: %w", err)
 	}
-
+	if token == nil {
+		return nil, errors.New("Token must be provided.")
+	}
 	// Check if token is valid
 	claims, ok := token.Claims.(*Claims)
 	if !ok || !token.Valid {
