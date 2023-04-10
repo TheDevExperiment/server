@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/TheDevExperiment/server/internal/utility/jwt"
 	"github.com/TheDevExperiment/server/router/models/auth"
@@ -19,21 +20,11 @@ const ContextKeyIsGuest = "IsGuest"
 	Those aspect can be handled by handler functions themselves for now.
 */
 func JWTAuthMiddleware(c *gin.Context) {
-	var req auth.AuthRequest
 	var res auth.AuthResponse
-	if err := c.ShouldBindJSON(&req); err != nil {
-		res.Message = err.Error()
-		c.JSON(http.StatusBadRequest, res)
-		c.Abort()
-		return
-	}
-	if req.SecretToken == "" {
-		res.Message = "SecretToken must not be an empty string"
-		c.JSON(http.StatusBadRequest, res)
-		c.Abort()
-		return
-	}
-	tokenClaims, err := jwt.VerifyToken(req.SecretToken)
+	bearerToken := strings.Split(
+		c.Request.Header.Get("Authorization"),
+		"Bearer ")[1]
+	tokenClaims, err := jwt.VerifyToken(bearerToken)
 	if err != nil {
 		res.Message = err.Error()
 		c.JSON(http.StatusBadRequest, res)
