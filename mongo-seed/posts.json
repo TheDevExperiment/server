@@ -1,41 +1,26 @@
 [
-    {
-      "_id": {"$oid": "6170c708b210f8e6e31d6c94"},
-      "userId": {"$oid": "6170c6d9b210f8e6e31d6c91"},
-      "authorName": "John Doe",
-      "createdAt": {"$date": "2022-10-22T14:30:00.000Z"},
-      "content": {
-        "message": "hello world",
-        "fetchUrl": null,
-        "backgroundType": "Image"
-      },
-      "cityId": "New York",
-      "countryId": "USA",
-      "coordinate": {
+  {
+    "_id": "6061f072c1760a272b4bb49a",
+    "userId": 12345,
+    "authorName": "John Doe",
+    "createdAt": "2023-04-10T10:30:00Z",
+    "cityId": 1,
+    "countryId": 2,
+    "coordinates": {
         "type": "Point",
-        "coordinates": [-73.935242, 40.730610]
-      },
-      "isActive": true,
-      "likes": 5
+        "coordinates": [
+            -122.4194,
+            37.7749
+        ]
     },
-    {
-      "_id": {"$oid": "6170c708b210f8e6e31d6c95"},
-      "userId": {"$oid": "6170c6d9b210f8e6e31d6c92"},
-      "authorName": "Jane Smith",
-      "createdAt": {"$date": "2022-10-23T16:30:00.000Z"},
-      "content": {
-        "message": "bye world",
-        "fetchUrl": null,
-        "backgroundType": "Image"
-      },
-      "cityId": "Toronto",
-      "countryId": "Canada",
-      "coordinate": {
-        "type": "Point",
-        "coordinates": [-79.3832, 43.6532]
-      },
-      "isActive": true,
-      "likes": 10
+    "isActive": true,
+    "likesCount": 10,
+    "commentsCount": 5,
+    "content": {
+        "text": "Lorem ipsum dolor sit amet",
+        "backgroundUrl": "https://example.com/image.jpg",
+        "backgroundType": 0
     }
-  ]
+  }
+]
   
