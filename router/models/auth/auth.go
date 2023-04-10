@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"github.com/TheDevExperiment/server/internal/db/repositories"
+	userModel "github.com/TheDevExperiment/server/internal/db/users/models"
 )
 
 type AuthRequest struct {
@@ -9,8 +9,8 @@ type AuthRequest struct {
 }
 
 type AuthResponse struct {
-	Message string                   `form:"message" json:"message" xml:"message"  binding:"required"`
-	Data    []repositories.UserModel `form:"data" json:"data"`
+	Message string           `form:"message" json:"message" xml:"message"  binding:"required"`
+	Data    []userModel.User `form:"data" json:"data"`
 }
 
 type CreateAccountRequest struct {

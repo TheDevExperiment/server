@@ -4,7 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/TheDevExperiment/server/internal/db/repositories"
+	"github.com/TheDevExperiment/server/internal/db/users"
+	userModels "github.com/TheDevExperiment/server/internal/db/users/models"
 	"github.com/TheDevExperiment/server/middlewares"
 	"github.com/TheDevExperiment/server/router/models/auth"
 	"github.com/gin-gonic/gin"
@@ -12,7 +13,7 @@ import (
 
 func GuestValidateV1(c *gin.Context) {
 	var res auth.AuthResponse
-	userRepository, ok := c.MustGet("userRepository").(*repositories.UserRepository)
+	userRepository, ok := c.MustGet("userRepository").(*users.UserRepository)
 	if !ok {
 		res.Message = http.StatusText(http.StatusInternalServerError)
 		c.JSON(http.StatusInternalServerError, res)
@@ -46,7 +47,7 @@ func CreateGuestV1(c *gin.Context) {
 	// first bind the req to our model
 	var req auth.CreateAccountRequest
 	var res auth.AuthResponse
-	userRepository, ok := c.MustGet("userRepository").(*repositories.UserRepository)
+	userRepository, ok := c.MustGet("userRepository").(*users.UserRepository)
 	if !ok {
 		res.Message = http.StatusText(http.StatusInternalServerError)
 		c.JSON(http.StatusInternalServerError, res)
@@ -73,6 +74,6 @@ func CreateGuestV1(c *gin.Context) {
 	log.Print(data)
 	// some error occurent
 	res.Message = "Created User."
-	res.Data = []repositories.UserModel{data}
+	res.Data = []userModels.User{data}
 	c.JSON(http.StatusCreated, res)
 }
