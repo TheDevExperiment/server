@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const ContextKey_UserId = "UserId"
-const ContextKey_IsGuest = "IsGuest"
+const ContextKeyUserId = "UserId"
+const ContextKeyIsGuest = "IsGuest"
 
 /*
 	if token is valid, attaches userId to the context.
@@ -46,7 +46,7 @@ var JWTAuthMiddleware gin.HandlerFunc = func(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	c.Set(ContextKey_UserId, (*tokenClaims).Subject)
-	c.Set(ContextKey_IsGuest, (*tokenClaims).IsGuest)
+	c.Set(ContextKeyUserId, (*tokenClaims).Subject)
+	c.Set(ContextKeyIsGuest, (*tokenClaims).IsGuest)
 	c.Next()
 }

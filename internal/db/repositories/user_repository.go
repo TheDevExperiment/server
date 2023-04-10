@@ -57,24 +57,26 @@ type _score struct {
 func NewUserRepository() *UserRepository {
 	return &UserRepository{db.GetCollection(viper.GetString("mongodb.db_name"), db.CollectionUsers)}
 }
-func (r *UserRepository) FindById(ctx context.Context, id string) ([]UserModel, error) {
-	bsonFilter := bson.M{"_id": id}
+func (r *UserRepository) FindById(ctx context.Context, id string) (*UserModel, error) {
+	bsonFilter := bson.M{db.FieldId: id}
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return nil, err
 	}
-	bsonFilter["_id"] = oid
+	bsonFilter[db.FieldId] = oid
 
-	cursor, err := r.collection.Find(ctx, bsonFilter)
-	if err != nil {
+	result := r.collection.FindOne(ctx, bsonFilter)
+	if result.Err() != nil {
+		if result.Err() == mongo.ErrNoDocuments {
+			return nil, nil
+		}
+		return nil, result.Err()
+	}
+	var user UserModel
+	if err := result.Decode(&user); err != nil {
 		return nil, err
 	}
-	var results []UserModel
-	err = cursor.All(ctx, &results)
-	if err != nil {
-		return nil, err
-	}
-	return results, nil
+	return &user, nil
 }
 
 func (r *UserRepository) Create(ctx context.Context, userAge string, countryId string, cityId string) (UserModel, error) {
@@ -139,7 +141,7 @@ func (r *UserRepository) UpdateById(ctx context.Context, id string, update UserU
 		return nil, err
 	}
 
-	filter := bson.M{"_id": docId}
+	filter := bson.M{db.FieldId: docId}
 	updateDoc := bson.M{
 		"$set": update,
 	}

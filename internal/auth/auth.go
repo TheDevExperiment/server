@@ -20,7 +20,7 @@ func GuestValidateV1(c *gin.Context) {
 	}
 
 	//set by the middleware
-	userId := c.GetString(middlewares.ContextKey_UserId)
+	userId := c.GetString(middlewares.ContextKeyUserId)
 	if userId == "" {
 		res.Message = http.StatusText(http.StatusUnauthorized)
 		c.JSON(http.StatusUnauthorized, res)
@@ -32,13 +32,13 @@ func GuestValidateV1(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, res)
 		return
 	}
-	if data == nil || len(data) < 1 {
+	if data == nil {
 		res.Message = http.StatusText(http.StatusUnauthorized)
 		c.JSON(http.StatusUnauthorized, res)
 		return
 	}
 	res.Message = "Authentication Successful"
-	res.Data = data
+	res.Data = append(res.Data, (*data))
 	c.JSON(http.StatusOK, res)
 }
 
