@@ -18,7 +18,7 @@ const ContextKeyIsGuest = "IsGuest"
 
 	Those aspect can be handled by handler functions themselves for now.
 */
-var JWTAuthMiddleware gin.HandlerFunc = func(c *gin.Context) {
+func JWTAuthMiddleware(c *gin.Context) {
 	var req auth.AuthRequest
 	var res auth.AuthResponse
 	if err := c.ShouldBindJSON(&req); err != nil {
