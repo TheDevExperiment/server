@@ -41,18 +41,16 @@ func CreateToken(id string, countryCode string, cityId string, isGuest bool) (st
 
 	return signedToken, nil
 }
+func handlerFunc(token *jwt.Token) (interface{}, error) {
+	// Validate signing method
+	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+		return nil, errors.New("unexpected signing method")
+	}
+	// Return secret for validation
+	return []byte(viper.GetString("jwt.secret")), nil
+}
 
 func VerifyToken(tokenString string) (*Claims, error) {
-
-	var handlerFunc jwt.Keyfunc = func(token *jwt.Token) (interface{}, error) {
-		// Validate signing method
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("unexpected signing method")
-		}
-		// Return secret for validation
-		return []byte(viper.GetString("jwt.secret")), nil
-	}
-
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, handlerFunc)
 	if err != nil {
 		return nil, fmt.Errorf("could not parse token: %w", err)
