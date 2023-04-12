@@ -25,7 +25,7 @@ type UserRepository struct {
 
 var singletonUserCollection *mongo.Collection
 
-func NewUserRepository() *UserRepository {
+func NewUserRepository() Users {
 	if singletonUserCollection == nil {
 		log.Debug("Created Connection to user collection")
 		singletonUserCollection = db.GetCollection(viper.GetString("mongodb.db_name"), db.CollectionUsers)

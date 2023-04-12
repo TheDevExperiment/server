@@ -5,8 +5,11 @@ import (
 )
 
 type AuthResponse struct {
-	Message string           `form:"message" json:"message" xml:"message"  binding:"required"`
-	Data    []userModel.User `form:"data" json:"data"`
+	Message string `form:"message" json:"message" xml:"message"  binding:"required"`
+
+	//gin dereferences the pointer and marshals the struct into JSON for the HTTP response
+	//more here: https://github.com/gin-gonic/gin#json
+	Data *userModel.User `form:"data" json:"data"`
 }
 
 type CreateAccountRequest struct {

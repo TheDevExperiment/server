@@ -1,11 +1,11 @@
 package auth
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/TheDevExperiment/server/internal/db/users"
 	userModels "github.com/TheDevExperiment/server/internal/db/users/models"
+	"github.com/TheDevExperiment/server/internal/log"
 	"github.com/TheDevExperiment/server/middlewares"
 	"github.com/TheDevExperiment/server/router/models/auth"
 	"github.com/gin-gonic/gin"
@@ -62,7 +62,7 @@ func CreateGuestV1(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	log.Print(data)
+	log.Debug(data)
 	// some error occurent
 	res.Message = "Created User."
 	res.Data = []userModels.User{data}
