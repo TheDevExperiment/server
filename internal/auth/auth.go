@@ -40,7 +40,7 @@ func GuestValidateV1(c *gin.Context) {
 func CreateGuestV1(c *gin.Context) {
 	// first bind the req to our model
 	var req auth.CreateAccountRequest
-	var res auth.Response
+	var res auth.CreateAccountResponse
 	userRepository := users.NewUserRepository()
 
 	if err := c.ShouldBindJSON(&req); err != nil {
