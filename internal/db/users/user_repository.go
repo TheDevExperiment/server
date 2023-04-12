@@ -55,7 +55,7 @@ func (r *UserRepository) FindById(ctx context.Context, id string) (*models.User,
 	return &user, nil
 }
 
-func (r *UserRepository) Create(ctx context.Context, userAge string, countryId string, cityId string) (models.User, error) {
+func (r *UserRepository) Create(ctx context.Context, userAge string, countryId string, cityId string) (*models.User, error) {
 	doc := models.User{
 		IsGuest:         true,
 		GuestAuthSecret: "",
@@ -72,16 +72,16 @@ func (r *UserRepository) Create(ctx context.Context, userAge string, countryId s
 
 	result, err := r.collection.InsertOne(ctx, doc)
 	if err != nil {
-		return models.User{}, err
+		return &models.User{}, err
 	}
 
 	insertedID, ok := result.InsertedID.(primitive.ObjectID)
 	if !ok {
-		return models.User{}, errors.New("failed to convert InsertedID to ObjectID")
+		return &models.User{}, errors.New("failed to convert InsertedID to ObjectID")
 	}
 	secret, err := jwt.CreateToken(insertedID.Hex(), countryId, cityId, true)
 	if err != nil {
-		return models.User{}, err
+		return &models.User{}, err
 	}
 
 	deltaUpdate := models.UserUpdateModel{
@@ -90,10 +90,10 @@ func (r *UserRepository) Create(ctx context.Context, userAge string, countryId s
 	}
 	success, updateErr := r.UpdateById(ctx, insertedID.Hex(), deltaUpdate)
 	if updateErr != nil {
-		return models.User{}, updateErr
+		return &models.User{}, updateErr
 	}
 	if !success {
-		return models.User{}, nil
+		return &models.User{}, nil
 	}
 
 	doc.Id = insertedID.Hex()
@@ -103,7 +103,7 @@ func (r *UserRepository) Create(ctx context.Context, userAge string, countryId s
 	doc.Score.RatingScoreSum = 0
 	doc.IsActive = true
 	doc.DeletionReason = ""
-	return doc, nil
+	return &doc, nil
 }
 
 func (r *UserRepository) Delete(ctx context.Context, filter interface{}) error {

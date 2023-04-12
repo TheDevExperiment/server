@@ -13,14 +13,14 @@ const ContextKeyUserId = "UserId"
 const ContextKeyIsGuest = "IsGuest"
 
 /*
-	if token is valid, attaches userId to the context.
-	Note that this middleware simply verifies the signature only.
-	It won't check if the Subject (in claim) is still an active user/not
+if token is valid, attaches userId to the context.
+Note that this middleware simply verifies the signature only.
+It won't check if the Subject (in claim) is still an active user/not
 
-	Those aspect can be handled by handler functions themselves for now.
+Those aspect can be handled by handler functions themselves for now.
 */
 func JWTAuthMiddleware(c *gin.Context) {
-	var res auth.AuthResponse
+	var res auth.Response
 	bearerToken := strings.Split(
 		c.Request.Header.Get("Authorization"),
 		"Bearer ")[1]

@@ -4,7 +4,7 @@ import (
 	userModel "github.com/TheDevExperiment/server/internal/db/users/models"
 )
 
-type AuthResponse struct {
+type Response struct {
 	Message string `form:"message" json:"message" xml:"message"  binding:"required"`
 
 	//gin dereferences the pointer and marshals the struct into JSON for the HTTP response
