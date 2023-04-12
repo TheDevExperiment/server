@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/TheDevExperiment/server/internal/db/users"
-	userModels "github.com/TheDevExperiment/server/internal/db/users/models"
 	"github.com/TheDevExperiment/server/internal/log"
 	"github.com/TheDevExperiment/server/middlewares"
 	"github.com/TheDevExperiment/server/router/models/auth"
@@ -34,7 +33,7 @@ func GuestValidateV1(c *gin.Context) {
 		return
 	}
 	res.Message = "Authentication Successful"
-	res.Data = append(res.Data, (*data))
+	res.Data = data
 	c.JSON(http.StatusOK, res)
 }
 
@@ -65,6 +64,6 @@ func CreateGuestV1(c *gin.Context) {
 	log.Debug(data)
 	// some error occurent
 	res.Message = "Created User."
-	res.Data = []userModels.User{data}
+	res.Data = &data
 	c.JSON(http.StatusCreated, res)
 }
