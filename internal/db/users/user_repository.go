@@ -7,6 +7,8 @@ import (
 	"errors"
 	"time"
 
+	"fmt"
+
 	"github.com/spf13/viper"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -129,5 +131,9 @@ func (r *UserRepository) UpdateById(ctx context.Context, id string, update model
 	}
 	log.Debug(updateResult)
 	isSuccess := updateResult.ModifiedCount > 0
-	return isSuccess, nil
+	var errResponse error = nil
+	if !isSuccess {
+		errResponse = fmt.Errorf("unsuccesful insert")
+	}
+	return isSuccess, errResponse
 }

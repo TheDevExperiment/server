@@ -21,9 +21,21 @@ Those aspect can be handled by handler functions themselves for now.
 */
 func JWTAuthMiddleware(c *gin.Context) {
 	var res auth.Response
-	bearerToken := strings.Split(
-		c.Request.Header.Get("Authorization"),
-		"Bearer ")[1]
+	authHeader := c.Request.Header.Get("Authorization")
+	if authHeader == "" {
+		res.Message = "Authorization header is missing"
+		c.JSON(http.StatusBadRequest, res)
+		c.Abort()
+		return
+	}
+	authHeaderParts := strings.Split(authHeader, "Bearer ")
+	if len(authHeaderParts) != 2 {
+		res.Message = "Authorization header has incorrect format"
+		c.JSON(http.StatusBadRequest, res)
+		c.Abort()
+		return
+	}
+	bearerToken := authHeaderParts[1]
 	tokenClaims, err := jwt.VerifyToken(bearerToken)
 	if err != nil {
 		res.Message = err.Error()
