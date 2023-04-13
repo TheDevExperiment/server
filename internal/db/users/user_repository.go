@@ -90,14 +90,10 @@ func (r *UserRepository) Create(ctx context.Context, userAge string, countryId s
 		GuestAuthSecret: secret,
 		LastModified:    time.Now(),
 	}
-	success, updateErr := r.UpdateById(ctx, insertedID.Hex(), deltaUpdate)
+	updateErr := r.UpdateById(ctx, insertedID.Hex(), deltaUpdate)
 	if updateErr != nil {
 		return &models.User{}, updateErr
 	}
-	if !success {
-		return &models.User{}, nil
-	}
-
 	doc.Id = insertedID.Hex()
 	doc.GuestAuthSecret = secret
 	doc.LastModified = time.Now()
@@ -113,11 +109,11 @@ func (r *UserRepository) Delete(ctx context.Context, filter interface{}) error {
 	return err
 }
 
-func (r *UserRepository) UpdateById(ctx context.Context, id string, update models.UserUpdateModel) (bool, error) {
+func (r *UserRepository) UpdateById(ctx context.Context, id string, update models.UserUpdateModel) error {
 	docId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		log.Errorf("failed to convert id to object id: %w", err)
-		return false, err
+		return err
 	}
 
 	filter := bson.M{db.FieldId: docId}
@@ -127,13 +123,12 @@ func (r *UserRepository) UpdateById(ctx context.Context, id string, update model
 
 	updateResult, err := r.collection.UpdateOne(ctx, filter, updateDoc)
 	if err != nil {
-		return false, err
+		return err
 	}
 	log.Debug(updateResult)
 	isSuccess := updateResult.ModifiedCount > 0
-	var errResponse error = nil
 	if !isSuccess {
-		errResponse = fmt.Errorf("unsuccesful insert")
+		return fmt.Errorf("unsuccesful insert")
 	}
-	return isSuccess, errResponse
+	return nil
 }
