@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/TheDevExperiment/server/internal/auth"
-	"github.com/TheDevExperiment/server/internal/db/repositories"
+	"github.com/TheDevExperiment/server/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,15 +17,9 @@ import (
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
-	userRepository := repositories.NewUserRepository()
-
-	// TODO: register middleware
-	r.Use(func(c *gin.Context) {
-		c.Set("userRepository", userRepository)
-		c.Next()
-	})
 
 	// define all the routes
-	r.POST("/auth/v1/guest-validate", auth.GuestValidateV1)
+	r.POST("/auth/v1/guest-validate", middlewares.JWTAuthMiddleware, auth.GuestValidateV1)
+	r.POST("/auth/v1/guest", auth.CreateGuestV1)
 	return r
 }

@@ -1,11 +1,14 @@
 # Project Veil
 
-Project Veilb is a social media app that lets you share your thoughts and feelings anonymously with a community of like-minded individuals. With our advanced user profiling system, you can connect with other users based on shared interests and values.
+Project Veil is a social media app that lets you share your thoughts and feelings anonymously with a community of like-minded individuals. Connect with other users based on shared interests and values.
 
 # How to run the code?
-`make server` -> this will compile the server and start it in background
-`make server_logs` -> to see server logs once it has been started
-`make clean` -> to shutdown the server and remove its files
+
+If you're running this on Windows, use WSL to run the local instance of the server.
+
+- `make server` -> this will compile the server and start it in background
+- `make server_logs` -> to see server logs once it has been started
+- `make clean` -> to shutdown the server and remove its files
 
 
 Use `localhost:8082` to checkout mongodb collections via browser.
@@ -28,4 +31,4 @@ We welcome contributions from the community! If you have an idea for a new featu
 
 ## Contact Us
 
-If you have any questions or feedback, please don't hesitate to reach out to us at [support@anonyverse.com](mailto:support@anonyverse.com). We're always happy to hear from our users!
+If you have any questions or feedback, please don't hesitate to reach out to us at our Discord (https://discord.gg/5vysRdpKz5). We're always happy to hear from our users!

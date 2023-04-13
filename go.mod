@@ -3,6 +3,7 @@ module github.com/TheDevExperiment/server
 go 1.20
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.9.0
 	github.com/redis/go-redis/v9 v9.0.3
 	go.mongodb.org/mongo-driver v1.11.3
